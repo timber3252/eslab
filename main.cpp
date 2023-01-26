@@ -4,17 +4,11 @@
 
 #include <iostream>
 
+#include "ascend/acl_device.hpp"
 #include "model/face_detect.hpp"
 
-#include "atlasutil/acl_device.h"
-
 int main() {
-  AclDevice aclDev;
-  auto ret = aclDev.Init();
-  if (ret) {
-    std::cerr << "init resource failed" << std::endl;
-    return -1;
-  }
+  AclDeviceRAII acl_device;
 
   FaceDetect face_detect("../data/face_detection.om");
   face_detect.init();

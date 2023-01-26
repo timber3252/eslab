@@ -55,9 +55,9 @@ link_directories(
 )
 
 add_executable(eslab main.cpp
-    model/face_detect.cpp model/face_detect.hpp
-    ascend/model.cpp ascend/model.hpp
-    util/image.cpp util/image.hpp ascend/acl.cpp ascend/acl.hpp)
+    model/face_detect.cpp model/face_detect.hpp model/face_feature_mask.cpp model/face_feature_mask.hpp
+    ascend/model.cpp ascend/model.hpp ascend/acl.cpp ascend/acl.hpp ascend/acl_device.cpp ascend/acl_device.hpp ascend/face_feature_train_mean.hpp ascend/face_feature_train_std.hpp
+    util/image.cpp util/image.hpp)
 
 target_link_libraries(eslab ascendcl atlasutil acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent avcodec swresample)
 
