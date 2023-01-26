@@ -5,6 +5,7 @@
 #include "acl.hpp"
 
 #include <stdexcept>
+
 #include "acl/acl.h"
 #include "atlasutil/atlas_model.h"
 #include "atlasutil/atlas_utils.h"

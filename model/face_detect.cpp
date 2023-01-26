@@ -5,6 +5,7 @@
 #include "face_detect.hpp"
 
 #include <utility>
+
 #include "../util/image.hpp"
 #include "../ascend/acl.hpp"
 
@@ -43,10 +44,10 @@ std::vector<FaceDetect::Result> FaceDetect::inference(cv::Mat &frame) {
     if (score < 70) break;
 
     cv::Point left_top, right_bottom;
-    left_top.x = data[TOP_LEFT_X + i * kItemSize] * frame.rows;
-    left_top.y = data[TOP_LEFT_Y + i * kItemSize] * frame.cols;
-    right_bottom.x = data[BOTTOM_RIGHT_X + i * kItemSize] * frame.rows;
-    right_bottom.y = data[BOTTOM_RIGHT_Y + i * kItemSize] * frame.cols;
+    left_top.x = data[TOP_LEFT_X + i * kItemSize] * frame.cols;
+    left_top.y = data[TOP_LEFT_Y + i * kItemSize] * frame.rows;
+    right_bottom.x = data[BOTTOM_RIGHT_X + i * kItemSize] * frame.cols;
+    right_bottom.y = data[BOTTOM_RIGHT_Y + i * kItemSize] * frame.rows;
 
     auto index = data[LABEL + i * kItemSize];
 
@@ -56,9 +57,6 @@ std::vector<FaceDetect::Result> FaceDetect::inference(cv::Mat &frame) {
     res.right_bottom = right_bottom;
 
     ret.emplace_back(res);
-
-    std::cout << res.index << " " << res.score << " " << res.left_top.x << " " << res.left_top.y << " "
-              << res.right_bottom.x << " " << res.right_bottom.y << std::endl;
   }
 
   return ret;

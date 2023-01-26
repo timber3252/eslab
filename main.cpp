@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "model/face_detect.hpp"
+
 #include "atlasutil/acl_device.h"
 
 int main() {
