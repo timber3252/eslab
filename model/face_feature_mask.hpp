@@ -9,16 +9,18 @@
 #include <opencv2/opencv.hpp>
 
 #include "../ascend/model.hpp"
+#include "face_detect.hpp"
 
 class FaceFeatureMask {
   static constexpr std::uint32_t kModelBatch = 4;
   static constexpr std::uint32_t kModelWidth = 40;
   static constexpr std::uint32_t kModelHeight = 40;
-  static constexpr std::uint32_t kModelInputSize = kModelWidth * kModelHeight * 3;
+  static constexpr std::uint32_t kModelImageSize = kModelWidth * kModelHeight * 3;
+  static constexpr std::uint32_t kModelInputSize = kModelBatch * kModelImageSize;
 
 public:
   struct Result {
-
+    std::uint32_t index;
   };
 
 public:
@@ -26,7 +28,7 @@ public:
   ~FaceFeatureMask();
 
   void init();
-  std::vector<Result> inference(cv::Mat &frame);
+  std::vector<Result> inference(const cv::Mat &frame, const std::vector<FaceDetect::Result> &detect_result);
 
 private:
   void *input_buffer_;

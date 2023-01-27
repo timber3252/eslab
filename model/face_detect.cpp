@@ -23,7 +23,7 @@ void FaceDetect::init() {
   model_.create_input(input_buffer_, kModelInputSize);
 }
 
-std::vector<FaceDetect::Result> FaceDetect::inference(cv::Mat &frame) {
+std::vector<FaceDetect::Result> FaceDetect::inference(const cv::Mat &frame) {
   // prepare model input
   cv::Mat input = image_convert_bgr_to_nv21(image_resize(frame, kModelWidth, kModelHeight));
   memcpy(input_buffer_, input.ptr<void>(), kModelInputSize);

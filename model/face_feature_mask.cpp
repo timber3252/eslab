@@ -28,23 +28,52 @@ void FaceFeatureMask::init() {
   model_.create_input(input_buffer_, kModelInputSize);
 }
 
-std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(cv::Mat &frame) {
-  // TODO: Batch 4
+std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &frame,
+                                                                const std::vector<FaceDetect::Result> &detect_result) {
+  if (detect_result.empty()) {
+    throw std::runtime_error("input inference data is empty");
+  }
 
-  // prepare model input
-  cv::Mat input = image_resize(frame, kModelWidth, kModelHeight);
+  std::vector<cv::Mat> inputs;
 
-  // normalization
-  input = input - train_mean_;
-  input = input / train_std_;
-  if (input.empty())
-    throw std::runtime_error("all the data is empty");
+  std::for_each(detect_result.begin(), detect_result.end(), [&](const FaceDetect::Result &data) {
+    // image preprocess
+    cv::Mat crop = image_crop(frame,
+                              data.left_top.y, data.right_bottom.y,
+                              data.left_top.x, data.right_bottom.x);
 
-  // copy to buffer
-  memcpy(input_buffer_, input.ptr<void>(), kModelInputSize);
+    cv::Mat input = image_resize(crop, kModelWidth, kModelHeight);
 
-  // do inference
-  auto result = model_.execute();
+    // normalization
+    input = input - train_mean_;
+    input = input / train_std_;
+
+    if (input.empty()) {
+      throw std::runtime_error("all the data is empty");
+    }
+
+    inputs.emplace_back(input);
+  });
+
+  // prepare input data (tensor with size 4 * 40 * 40 * 3)
+  std::size_t input_size = inputs.size();
+  std::size_t last_batch_size = input_size % kModelBatch;
+  std::size_t batch_count = input_size / kModelBatch + !!last_batch_size;
+
+  for (std::size_t i = 0; i < batch_count; ++i) {
+    std::size_t start_index = i * kModelBatch;
+    auto pos = reinterpret_cast<std::uint8_t*>(input_buffer_);
+
+    for (std::size_t j = 0; j < kModelBatch; ++j) {
+      // for the last batch, fulfill the extra data with the last image as placeholder
+      auto input = inputs[std::min(start_index + j, inputs.size() - 1)];
+
+      memcpy(pos + j * kModelImageSize, input.ptr<void>(), kModelImageSize);
+    }
+
+    // do inference
+    auto result = model_.execute();
+  }
 
   // TODO: Post Process
 }

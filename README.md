@@ -16,4 +16,4 @@ Inspired by [Ascend Community Samples](https://gitee.com/ascend/samples), re-imp
 
 ## License
 
-The project is licensed under [MIT License](license) if no special instructions are given.
+The project is licensed under [MIT License](LICENSE) if no special instructions are given.

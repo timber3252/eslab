@@ -36,3 +36,8 @@ cv::Mat image_convert_bgr_to_nv21(const cv::Mat &image) {
   delete []tmp;
   return result;
 }
+
+cv::Mat image_crop(const cv::Mat &image, std::int32_t row_start, std::int32_t row_end,
+                   std::int32_t col_start, std::int32_t col_end) {
+  return image(cv::Range(row_start, row_end), cv::Range(col_start, col_end));
+}

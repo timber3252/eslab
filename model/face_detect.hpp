@@ -38,7 +38,7 @@ public:
   ~FaceDetect();
 
   void init();
-  std::vector<Result> inference(cv::Mat &frame);
+  std::vector<Result> inference(const cv::Mat &frame);
 
 private:
   void *input_buffer_;
