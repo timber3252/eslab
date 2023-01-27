@@ -29,16 +29,16 @@ public:
 
 private:
   enum FaceFeaturePos {
-    kLeftEyeX = 0,
-    kLeftEyeY = 1,
-    kRightEyeX = 2,
-    kRightEyeY = 3,
-    kNoseX = 4,
-    kNoseY = 5,
-    kLeftMouthX = 6,
-    kLeftMouthY = 7,
-    kRightMouthX = 8,
-    kRightMouthY = 9
+    LEFT_EYE_X = 0,
+    LEFT_EYE_Y = 1,
+    RIGHT_EYE_X = 2,
+    RIGHT_EYE_Y = 3,
+    NOSE_X = 4,
+    NOSE_Y = 5,
+    LEFT_MOUTH_X = 6,
+    LEFT_MOUTH_Y = 7,
+    RIGHT_MOUTH_X = 8,
+    RIGHT_MOUTH_Y = 9
   };
 
 public:

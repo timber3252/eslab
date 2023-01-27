@@ -48,8 +48,8 @@ std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &f
     cv::Mat crop = image_crop(frame,
                               data.left_top.y, data.right_bottom.y,
                               data.left_top.x, data.right_bottom.x);
-
-    cv::Mat input = image_convert_8uc3_to_32fc3(image_resize(crop, kModelWidth, kModelHeight));
+    cv::Mat resize = image_resize(crop, kModelWidth, kModelHeight);
+    cv::Mat input = image_convert_8uc3_to_32fc3(resize);
 
     // normalization
     input = input - train_mean_;
@@ -77,19 +77,42 @@ std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &f
 
     for (std::size_t j = 0; j < kModelBatch; ++j) {
       // for the last batch, fulfill the extra data with the last image as placeholder
-      auto input_32f = inputs[std::min(start_index + j, inputs.size() - 1)];
+      auto input_32f = inputs[std::min(start_index + j, input_size - 1)];
 
       memcpy(pos + j * kModelImageScale, input_32f.ptr<float>(), kModelImageScale * sizeof(float));
     }
 
     // do inference
     auto result = model_.execute();
-
-    auto total = reinterpret_cast<std::uint32_t*>(result[1].data.get())[0];
     auto data = reinterpret_cast<float*>(result[0].data.get());
 
-    // debug
-    std::cout << total << std::endl;
+    // process output data
+    for (std::size_t j = 0; j < kModelBatch; ++j) {
+      std::size_t index = start_index + j;
+      if (index >= input_size) break;
+      std::size_t st = j * 10;
+
+      auto get_coords = [&](float x, float y) -> cv::Point {
+        return {
+          static_cast<std::int32_t>(1.0 * (x + kNormalizedCenterData) * results[index].face_image.cols),
+          static_cast<std::int32_t>(1.0 * (y + kNormalizedCenterData) * results[index].face_image.rows)
+        };
+      };
+
+      results[index].left_eye = get_coords(data[st + LEFT_EYE_X], data[st + LEFT_EYE_Y]);
+      results[index].right_eye = get_coords(data[st + RIGHT_EYE_X], data[st + RIGHT_EYE_Y]);
+      results[index].nose = get_coords(data[st + NOSE_X], data[st + NOSE_Y]);
+      results[index].left_mouth = get_coords(data[st + LEFT_MOUTH_X], data[st + LEFT_MOUTH_Y]);
+      results[index].right_mouth = get_coords(data[st + RIGHT_MOUTH_X], data[st + RIGHT_MOUTH_Y]);
+
+      cv::circle(results[index].face_image, results[index].left_eye, 1, cv::Scalar(255, 0, 0));
+      cv::circle(results[index].face_image, results[index].right_eye, 1, cv::Scalar(255, 0, 0));
+      cv::circle(results[index].face_image, results[index].nose, 1, cv::Scalar(0, 255, 0));
+      cv::circle(results[index].face_image, results[index].left_mouth, 1, cv::Scalar(0, 0, 255));
+      cv::circle(results[index].face_image, results[index].right_mouth, 1, cv::Scalar(0, 0, 255));
+
+      cv::imwrite("output.jpg", results[index].face_image);
+    }
   }
 
   // debug
