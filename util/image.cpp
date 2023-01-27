@@ -37,7 +37,14 @@ cv::Mat image_convert_bgr_to_nv21(const cv::Mat &image) {
   return result;
 }
 
+cv::Mat image_convert_8uc3_to_32fc3(const cv::Mat &image) {
+  cv::Mat result(image.rows, image.cols, CV_32FC3);
+  image.convertTo(result, CV_32FC3, 1.0 / 255.0);
+  return result;
+}
+
 cv::Mat image_crop(const cv::Mat &image, std::int32_t row_start, std::int32_t row_end,
                    std::int32_t col_start, std::int32_t col_end) {
   return image(cv::Range(row_start, row_end), cv::Range(col_start, col_end));
 }
+

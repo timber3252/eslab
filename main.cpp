@@ -6,12 +6,12 @@
 
 #include "ascend/acl_device.hpp"
 #include "model/face_detect.hpp"
+#include "model/face_feature_mask.hpp"
 
 int main() {
   AclDeviceRAII acl_device;
-
   FaceDetect face_detect("../data/face_detection.om");
-  face_detect.init();
+  FaceFeatureMask face_feature_mask("../data/vanillacnn.om");
 
   cv::VideoCapture capture(0);
   if (!capture.isOpened()) {
@@ -26,7 +26,8 @@ int main() {
       return -1;
     }
 
-    face_detect.inference(frame);
+    auto detect_result = face_detect.inference(frame);
+    auto feature_mask_result = face_feature_mask.inference(frame, detect_result);
   }
 
   return 0;

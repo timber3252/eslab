@@ -11,6 +11,7 @@
 
 FaceDetect::FaceDetect(const std::string& model_path)
 : input_buffer_(nullptr), model_(model_path) {
+  init();
 }
 
 FaceDetect::~FaceDetect() {

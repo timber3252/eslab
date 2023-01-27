@@ -37,10 +37,11 @@ public:
   explicit FaceDetect(const std::string& model_path);
   ~FaceDetect();
 
-  void init();
   std::vector<Result> inference(const cv::Mat &frame);
 
 private:
+  void init();
+
   void *input_buffer_;
   Model model_;
 };
