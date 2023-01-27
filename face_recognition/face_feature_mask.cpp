@@ -37,7 +37,8 @@ void FaceFeatureMask::init() {
 std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &frame,
                                                                 const std::vector<FaceDetect::Result> &detect_result) {
   if (detect_result.empty()) {
-    throw std::runtime_error("input inference data is empty");
+    // just ignore this image
+    return std::vector<Result>{};
   }
 
   std::vector<cv::Mat> inputs;

@@ -24,13 +24,14 @@ void FaceRecognition::init() {
 
 std::vector<FaceRecognition::Result> FaceRecognition::inference(const std::vector<FaceFeatureMask::Result> &feature_mask_result) {
   if (feature_mask_result.empty()) {
-    throw std::runtime_error("input inference data is empty");
+    // just ignore this image
+    return std::vector<Result>{};
   }
 
   auto align_results = face_align(feature_mask_result);
   if (align_results.empty()) {
-    // TODO: maybe ignore error
-    throw std::runtime_error("align results is empty");
+    // just ignore this frame
+    return std::vector<Result>{};
   }
 
   // TODO: prepare input
@@ -75,8 +76,8 @@ std::vector<FaceRecognition::AlignResult> FaceRecognition::face_align(const std:
       trans_matrix = cv::estimateAffine2D(src_points, dst_points);
 
       if (!check_transform(trans_matrix)) {
-        // TODO: maybe ignore error
-        throw std::runtime_error("determination of transform matrix failed");
+        // just ignore this image
+        return std::vector<AlignResult>{};
       }
     }
 
