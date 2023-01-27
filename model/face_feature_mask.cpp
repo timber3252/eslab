@@ -108,19 +108,8 @@ std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &f
       results[index].nose = get_coords(data[st + NOSE_X], data[st + NOSE_Y]);
       results[index].left_mouth = get_coords(data[st + LEFT_MOUTH_X], data[st + LEFT_MOUTH_Y]);
       results[index].right_mouth = get_coords(data[st + RIGHT_MOUTH_X], data[st + RIGHT_MOUTH_Y]);
-
-      cv::circle(results[index].face_image, results[index].left_eye, 1, cv::Scalar(255, 0, 0));
-      cv::circle(results[index].face_image, results[index].right_eye, 1, cv::Scalar(255, 0, 0));
-      cv::circle(results[index].face_image, results[index].nose, 1, cv::Scalar(0, 255, 0));
-      cv::circle(results[index].face_image, results[index].left_mouth, 1, cv::Scalar(0, 0, 255));
-      cv::circle(results[index].face_image, results[index].right_mouth, 1, cv::Scalar(0, 0, 255));
-
-      cv::imwrite("output.jpg", results[index].face_image);
     }
   }
 
-  // debug
-  exit(-1);
-
-  // TODO: Post Process
+  return results;
 }
