@@ -4,8 +4,6 @@
 
 #include "image.hpp"
 
-#include <stdexcept>
-
 cv::Mat image_resize(const cv::Mat &image, std::int32_t width, std::int32_t height) {
   cv::Mat result;
   cv::resize(image, result, cv::Size(width, height));
@@ -59,4 +57,19 @@ std::vector<cv::Mat> image_split_channel(const cv::Mat &image) {
   cv::split(image, split_input);
   return split_input;
 }
+
+cv::Mat image_convert_bgr_to_rgb(const cv::Mat &image) {
+  cv::Mat result;
+  cv::cvtColor(image, result, cv::COLOR_BGR2RGB);
+  return result;
+}
+
+cv::Mat image_flip_vertically(const cv::Mat &image) {
+  cv::Mat result, temp;
+  cv::flip(image, temp, 1);
+  cv::flip(temp, result, -1);
+  return result;
+}
+
+
 

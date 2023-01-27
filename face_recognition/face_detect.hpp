@@ -2,8 +2,8 @@
 // Created by timber3252 on 2023/1/26.
 //
 
-#ifndef ESLAB_MODEL_FACE_DETECT_HPP
-#define ESLAB_MODEL_FACE_DETECT_HPP
+#ifndef ESLAB_FACE_RECOGNITION_FACE_DETECT_HPP
+#define ESLAB_FACE_RECOGNITION_FACE_DETECT_HPP
 
 #include <string>
 #include <opencv2/opencv.hpp>
@@ -46,4 +46,4 @@ private:
   Model model_;
 };
 
-#endif //ESLAB_MODEL_FACE_DETECT_HPP
+#endif //ESLAB_FACE_RECOGNITION_FACE_DETECT_HPP

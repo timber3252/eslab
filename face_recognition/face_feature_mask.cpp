@@ -6,8 +6,8 @@
 
 #include "../ascend/acl.hpp"
 #include "../util/image.hpp"
-#include "../ascend/face_feature_train_mean.hpp"
-#include "../ascend/face_feature_train_std.hpp"
+#include "face_feature_train_mean.hpp"
+#include "face_feature_train_std.hpp"
 
 FaceFeatureMask::FaceFeatureMask(const std::string &model_path)
 : input_buffer_(nullptr), model_(model_path) {

@@ -14,8 +14,8 @@
 * limitations under the License.
 */
 
-#ifndef FACE_FEATURE_MASK_MEAN_H_
-#define FACE_FEATURE_MASK_MEAN_H_
+#ifndef ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_MEAN_HPP
+#define ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_MEAN_HPP
 
 const std::uint8_t kTrainMean[4800] = {
     69, 81, 98, 69, 83, 101, 71, 85, 105, 73, 88, 111, 76, 92, 118, 80, 98, 126, 84, 103, 134, 89, 109, 142, 93, 114, 149, 98, 119, 156, 102, 124, 162, 107, 129, 168, 111,
@@ -154,4 +154,4 @@ const std::uint8_t kTrainMean[4800] = {
     83, 94, 112, 84, 94, 112
 };
 
-#endif
+#endif //ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_MEAN_HPP

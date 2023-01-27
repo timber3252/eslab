@@ -5,8 +5,8 @@
 #include <iostream>
 
 #include "ascend/acl_device.hpp"
-#include "model/face_detect.hpp"
-#include "model/face_feature_mask.hpp"
+#include "face_recognition/face_detect.hpp"
+#include "face_recognition/face_feature_mask.hpp"
 
 int main() {
   AclDeviceRAII acl_device;

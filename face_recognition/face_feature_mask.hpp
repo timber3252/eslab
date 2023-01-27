@@ -2,8 +2,8 @@
 // Created by timber3252 on 2023/1/26.
 //
 
-#ifndef ESLAB_MODEL_FACE_FEATURE_MASK_HPP
-#define ESLAB_MODEL_FACE_FEATURE_MASK_HPP
+#ifndef ESLAB_FACE_RECOGNITION_FACE_FEATURE_MASK_HPP
+#define ESLAB_FACE_RECOGNITION_FACE_FEATURE_MASK_HPP
 
 #include <string>
 #include <opencv2/opencv.hpp>
@@ -56,4 +56,4 @@ private:
   cv::Mat train_mean_{}, train_std_{};
 };
 
-#endif //ESLAB_MODEL_FACE_FEATURE_MASK_HPP
+#endif //ESLAB_FACE_RECOGNITION_FACE_FEATURE_MASK_HPP

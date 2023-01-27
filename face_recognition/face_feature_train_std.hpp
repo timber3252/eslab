@@ -14,8 +14,8 @@
 * limitations under the License.
 */
 
-#ifndef FACE_FEATURE_MASK_STD_H_
-#define FACE_FEATURE_MASK_STD_H_
+#ifndef ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_STD_HPP
+#define ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_STD_HPP
 
 const std::uint8_t kTrainStd[4800] = {58, 61, 66, 57, 59, 65, 56, 58, 65, 54, 58, 65, 53, 57, 65, 53, 56, 65, 53, 56, 65, 53, 56, 65, 53, 55, 64, 52, 55, 63, 52, 54, 62, 52, 53, 60, 52, 53, 59, 52, 52, 57,
 51, 51, 56, 51, 51, 55, 51, 51, 54, 51, 50, 54, 51, 50, 53, 51, 50, 53, 50, 50, 53, 51, 50, 53, 51, 50, 53, 51, 50, 53, 51, 50, 54, 51, 50, 54, 51, 51, 55, 51, 52, 57, 52,
@@ -130,4 +130,4 @@ const std::uint8_t kTrainStd[4800] = {58, 61, 66, 57, 59, 65, 56, 58, 65, 54, 58
 49, 56, 48, 48, 54, 47, 47, 53, 47, 47, 52, 47, 47, 52, 47, 46, 52, 47, 47, 53, 48, 48, 54, 48, 49, 56, 49, 50, 57, 50, 51, 58, 51, 52, 60, 51, 53, 61, 52, 53, 61, 53, 54,
 62, 54, 55, 63, 56, 57, 63, 57, 58, 64, 58, 59, 65, 60, 60, 66, 62, 62, 67, 63, 63, 68, 64, 65, 69, 66, 66, 71};
 
-#endif
+#endif //ESLAB_FACE_RECOGNITION_FAC_FEATURE_TRAIN_STD_HPP
