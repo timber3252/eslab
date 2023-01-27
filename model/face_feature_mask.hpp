@@ -15,8 +15,8 @@ class FaceFeatureMask {
   static constexpr std::uint32_t kModelBatch = 4;
   static constexpr std::uint32_t kModelWidth = 40;
   static constexpr std::uint32_t kModelHeight = 40;
-  static constexpr std::uint32_t kModelImageScale = kModelWidth * kModelHeight * 3;
-  static constexpr std::uint32_t kModelInputSize = kModelBatch * kModelImageScale * sizeof(float);
+  static constexpr std::uint32_t kModelImageScale = kModelWidth * kModelHeight;
+  static constexpr std::uint32_t kModelInputSize = kModelBatch * kModelImageScale * 3 * sizeof(float);
 
   static constexpr float kNormalizedCenterData = 0.5;
 

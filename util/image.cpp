@@ -45,6 +45,18 @@ cv::Mat image_convert_8uc3_to_32fc3(const cv::Mat &image) {
 
 cv::Mat image_crop(const cv::Mat &image, std::int32_t row_start, std::int32_t row_end,
                    std::int32_t col_start, std::int32_t col_end) {
+  row_start = (row_start >> 1) << 1;
+  col_start = (col_start >> 1) << 1;
+
+  row_end = ((row_end >> 1) << 1) - 1;
+  col_end = ((col_end >> 1) << 1) - 1;
+
   return image(cv::Range(row_start, row_end), cv::Range(col_start, col_end));
+}
+
+std::vector<cv::Mat> image_split_channel(const cv::Mat &image) {
+  std::vector<cv::Mat> split_input;
+  cv::split(image, split_input);
+  return split_input;
 }
 

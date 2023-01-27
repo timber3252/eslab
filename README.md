@@ -6,7 +6,7 @@ An assignment for Embedded Systems
 
 ## Face Recognition
 
-Inspired by [Ascend Community Samples](https://gitee.com/ascend/samples), re-implement to solve [this issue](https://toscode.gitee.com/ascend/samples/issues/I51GHH).
+Inspired by [Ascend Community Samples](https://gitee.com/ascend/samples), re-implement to solve [this issue](https://toscode.gitee.com/ascend/samples/issues/I51GHH) and a lot of minor problems.
 
 ### Models
 

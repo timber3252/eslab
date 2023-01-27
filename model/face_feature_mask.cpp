@@ -11,11 +11,11 @@
 
 FaceFeatureMask::FaceFeatureMask(const std::string &model_path)
 : input_buffer_(nullptr), model_(model_path) {
-  cv::Mat mean(kModelHeight, kModelWidth, CV_32FC3, (void *)kTrainMean);
-  cv::Mat std(kModelHeight, kModelWidth, CV_32FC3, (void *)kTrainStd);
+  cv::Mat mean(kModelHeight, kModelWidth, CV_8UC3, (void*)(kTrainMean));
+  cv::Mat std(kModelHeight, kModelWidth, CV_8UC3, (void*)(kTrainStd));
 
-  // implicit convert 32fc3 to 8uc3
-  train_mean_ = mean, train_std_ = std;
+  mean.convertTo(train_mean_, CV_32FC3, 1.0 / 255.0);
+  std.convertTo(train_std_, CV_32FC3, 1.0 / 255.0);
 
   if (train_mean_.empty() || train_std_.empty()) {
     throw std::runtime_error("load mean / std matrix failed");
@@ -78,8 +78,12 @@ std::vector<FaceFeatureMask::Result> FaceFeatureMask::inference(const cv::Mat &f
     for (std::size_t j = 0; j < kModelBatch; ++j) {
       // for the last batch, fulfill the extra data with the last image as placeholder
       auto input_32f = inputs[std::min(start_index + j, input_size - 1)];
+      auto split_input = image_split_channel(input_32f);
 
-      memcpy(pos + j * kModelImageScale, input_32f.ptr<float>(), kModelImageScale * sizeof(float));
+      for (auto &k : split_input) {
+        memcpy(pos, k.ptr<float>(), kModelImageScale * sizeof(float));
+        pos += kModelImageScale;
+      }
     }
 
     // do inference
