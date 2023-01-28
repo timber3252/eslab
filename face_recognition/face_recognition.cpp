@@ -13,6 +13,7 @@ FaceRecognition::FaceRecognition(const std::string &model_path)
 }
 
 FaceRecognition::~FaceRecognition() {
+  aclrt_free(input_buffer_);
   model_.destroy_resource();
 }
 

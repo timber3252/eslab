@@ -33,7 +33,7 @@ public:
             const std::string &face_library);
 
   bool add_face(const std::string &name, const std::vector<double> &feature_vector);
-  std::map<std::uint32_t, Result> face_recognition(cv::Mat &frame);
+  std::pair<std::map<std::uint32_t, Result>, cv::Mat> face_recognition(cv::Mat &frame);
   std::pair<bool, std::vector<double>> get_feature_vector(cv::Mat &frame);
 
 private:

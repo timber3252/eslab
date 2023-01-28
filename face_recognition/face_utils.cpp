@@ -15,10 +15,12 @@ FaceUtils::FaceUtils(const std::string &face_detection,
   load_faces_from_folder(face_library);
 }
 
-std::map<std::uint32_t, FaceUtils::Result> FaceUtils::face_recognition(cv::Mat &frame) {
+std::pair<std::map<std::uint32_t, FaceUtils::Result>, cv::Mat> FaceUtils::face_recognition(cv::Mat &frame) {
   std::map<std::uint32_t, Result> results{};
 
-  auto detect_result = face_detect_.inference(frame);
+  cv::Mat overlay_image = frame;
+
+  std::vector<FaceDetect::Result> detect_result = face_detect_.inference(frame);
   auto feature_mask_result = face_feature_mask_.inference(frame, detect_result);
   for (auto &fmr : feature_mask_result) {
     results[fmr.index] = {
@@ -52,7 +54,19 @@ std::map<std::uint32_t, FaceUtils::Result> FaceUtils::face_recognition(cv::Mat &
     results[frr.index].score = highest_score;
   }
 
-  return results;
+  for (auto &dr : detect_result) {
+    auto pt1 = dr.left_top, pt2 = dr.right_bottom;
+
+    cv::rectangle(overlay_image, pt1, pt2, cv::Scalar(0, 255, 0));
+
+    const auto &result = results[dr.index];
+    cv::putText(overlay_image, result.face_tag, cv::Point(pt1.x + 5, pt1.y - 5),
+                cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0), 2);
+    cv::putText(overlay_image, std::to_string(result.score) + "%", cv::Point(pt1.x + 5, pt2.y - 5),
+                cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0), 2);
+  }
+
+  return {results, overlay_image};
 }
 
 std::pair<bool, std::vector<double>> FaceUtils::get_feature_vector(cv::Mat &frame) {

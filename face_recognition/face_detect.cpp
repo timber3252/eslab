@@ -15,6 +15,7 @@ FaceDetect::FaceDetect(const std::string& model_path)
 }
 
 FaceDetect::~FaceDetect() {
+  aclrt_free(input_buffer_);
   model_.destroy_resource();
 }
 

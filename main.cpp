@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "ascend/acl_device.hpp"
+#include "ascend/presenter.hpp"
 #include "face_recognition/face_utils.hpp"
 
 int main() {
@@ -15,6 +16,8 @@ int main() {
                        "../data/vanillacnn.om",
                        "../data/sphereface.om",
                        "../data/faces");
+
+  Presenter presenter("../data/face_recognition.conf");
 
   cv::VideoCapture capture(0);
   if (!capture.isOpened()) {
@@ -30,13 +33,9 @@ int main() {
     }
 
     auto result = face_utils.face_recognition(frame);
-    if (!result.empty()) {
-      std::cout << result.begin()->second.face_tag << " " << result.begin()->second.score << std::endl;
-    } else {
-      std::cout << "empty" << std::endl;
-    }
+    presenter.SendImage(result.second);
 
-    usleep(1000 * 1000);
+    usleep(200 * 1000);
   }
 
   return 0;

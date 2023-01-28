@@ -25,6 +25,7 @@ FaceFeatureMask::FaceFeatureMask(const std::string &model_path)
 }
 
 FaceFeatureMask::~FaceFeatureMask() {
+  aclrt_free(input_buffer_);
   model_.destroy_resource();
 }
 
