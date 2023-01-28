@@ -19,7 +19,6 @@ class FaceRecognition {
   static constexpr std::uint32_t kModelHeight = 112;
   static constexpr std::uint32_t kModelImageSize = kModelWidth * kModelHeight * 3;
   static constexpr std::uint32_t kModelInputSize = kModelBatch * kEachBatchImageCount * kModelImageSize;
-  static constexpr std::uint32_t kFeatureVectorLength = 1024;
 
   static constexpr float kLeftEyeX = 30.2946;
   static constexpr float kLeftEyeY = 51.6963;
@@ -33,6 +32,8 @@ class FaceRecognition {
   static constexpr float kRightMouthCornerY = 92.2041;
 
 public:
+  static constexpr std::uint32_t kFeatureVectorLength = 1024;
+
   struct Result {
     std::uint32_t index;
     cv::Mat face;
