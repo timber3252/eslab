@@ -12,7 +12,8 @@ int main() {
 
   FaceUtils face_utils("../data/face_detection.om",
                        "../data/vanillacnn.om",
-                       "../data/face_detection.om");
+                       "../data/face_detection.om",
+                       "../data/faces");
 
   cv::VideoCapture capture(0);
   if (!capture.isOpened()) {

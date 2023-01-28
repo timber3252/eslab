@@ -4,6 +4,7 @@
 
 #include "face_utils.hpp"
 
+#include <dirent.h>
 #include "../util/math.hpp"
 
 FaceUtils::FaceUtils(const std::string &face_detection,
@@ -11,6 +12,7 @@ FaceUtils::FaceUtils(const std::string &face_detection,
                      const std::string &sphere_face,
                      const std::string &face_library)
 : face_detect_(face_detection), face_feature_mask_(vanilla_cnn), face_recognition_(sphere_face) {
+  load_faces_from_folder(face_library);
 }
 
 std::map<std::uint32_t, FaceUtils::Result> FaceUtils::face_recognition(cv::Mat &frame) {
@@ -62,4 +64,59 @@ std::pair<bool, std::vector<double>> FaceUtils::get_feature_vector(cv::Mat &fram
     return {false, {}};
 
   return {true, to_double_vector(face_recognition_result[0].feature_vector)};
+}
+
+void FaceUtils::load_faces_from_folder(const std::string &face_library) {
+  DIR *dir = opendir(face_library.data());
+  if (dir == nullptr) {
+    throw std::runtime_error("face library path given is not a valid directory");
+  }
+
+  std::string folder_path = face_library + (face_library.back() == '/' ? "" : "/");
+  folder_path_ = folder_path;
+
+  dirent *dp;
+  while ((dp = readdir(dir)) != nullptr) {
+    std::string file_name(dp->d_name);
+
+    if (file_name == ".." || file_name == ".") {
+      continue;
+    }
+
+    std::string file_path = folder_path + file_name;
+
+    std::ifstream fin(file_path);
+    if (!fin.is_open()) {
+      continue;
+    }
+
+    std::cout << "loaded face " << file_name << std::endl;
+
+    std::vector<double> feature_vector(FaceRecognition::kFeatureVectorLength);
+    for (auto &x : feature_vector) fin >> x;
+
+    face_library_.insert({file_name, feature_vector});
+    fin.close();
+  }
+
+  closedir(dir);
+}
+
+bool FaceUtils::add_face(const std::string &name, const std::vector<double> &feature_vector) {
+  // check if face name already exist
+  if (face_library_.count(name))
+    return false;
+
+  // update
+  face_library_[name] = feature_vector;
+
+  // write to file
+  std::ofstream fout(folder_path_ + name);
+  for (auto &x : feature_vector) {
+    fout << std::setprecision(10) << std::fixed << x << " ";
+  }
+
+  std::cout << "added face: " << name << std::endl;
+
+  fout.close();
 }

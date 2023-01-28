@@ -32,10 +32,15 @@ public:
             const std::string &sphere_face,
             const std::string &face_library);
 
+  bool add_face(const std::string &name, const std::vector<double> &feature_vector);
   std::map<std::uint32_t, Result> face_recognition(cv::Mat &frame);
   std::pair<bool, std::vector<double>> get_feature_vector(cv::Mat &frame);
 
 private:
+  void load_faces_from_folder(const std::string &face_library);
+
+private:
+  std::string folder_path_{};
   std::map<std::string, std::vector<double>> face_library_{};
   FaceDetect face_detect_;
   FaceFeatureMask face_feature_mask_;
