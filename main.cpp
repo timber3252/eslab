@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <unistd.h>
 
 #include "ascend/acl_device.hpp"
 #include "face_recognition/face_utils.hpp"
@@ -12,7 +13,7 @@ int main() {
 
   FaceUtils face_utils("../data/face_detection.om",
                        "../data/vanillacnn.om",
-                       "../data/face_detection.om",
+                       "../data/sphereface.om",
                        "../data/faces");
 
   cv::VideoCapture capture(0);
@@ -29,6 +30,13 @@ int main() {
     }
 
     auto result = face_utils.face_recognition(frame);
+    if (!result.empty()) {
+      std::cout << result.begin()->second.face_tag << " " << result.begin()->second.score << std::endl;
+    } else {
+      std::cout << "empty" << std::endl;
+    }
+
+    usleep(1000 * 1000);
   }
 
   return 0;
