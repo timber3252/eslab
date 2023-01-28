@@ -17,7 +17,9 @@ class FaceRecognition {
   static constexpr std::uint32_t kEachBatchImageCount = 2;
   static constexpr std::uint32_t kModelWidth = 96;
   static constexpr std::uint32_t kModelHeight = 112;
-  static constexpr std::uint32_t kModelInputSize = kModelBatch * kEachBatchImageCount * kModelWidth * kModelHeight * 3;
+  static constexpr std::uint32_t kModelImageSize = kModelWidth * kModelHeight * 3;
+  static constexpr std::uint32_t kModelInputSize = kModelBatch * kEachBatchImageCount * kModelImageSize;
+  static constexpr std::uint32_t kFeatureVectorLength = 1024;
 
   static constexpr float kLeftEyeX = 30.2946;
   static constexpr float kLeftEyeY = 51.6963;
@@ -32,13 +34,15 @@ class FaceRecognition {
 
 public:
   struct Result {
-
+    std::uint32_t index;
+    cv::Mat face;
+    std::vector<float> feature_vector;
   };
 
 private:
   struct AlignResult {
     std::uint32_t index;
-    cv::Mat aligned_face, aligned_flip_face;
+    cv::Mat face, aligned_face, aligned_flip_face;
   };
 
 public:

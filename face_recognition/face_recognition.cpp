@@ -34,11 +34,49 @@ std::vector<FaceRecognition::Result> FaceRecognition::inference(const std::vecto
     return std::vector<Result>{};
   }
 
-  // TODO: prepare input
+  std::vector<Result> results;
 
-  auto result = model_.execute();
+  // prepare input data (tensor with size 8 * 112 * 96 * 3)
+  std::size_t input_size = align_results.size();
+  std::size_t last_batch_size = input_size % kModelBatch;
+  std::size_t batch_count = input_size / kModelBatch + !!last_batch_size;
 
-  // TODO: post process
+  for (std::size_t i = 0; i < batch_count; ++i) {
+    std::size_t start_index = i * kModelBatch;
+    auto pos = reinterpret_cast<std::uint8_t*>(input_buffer_);
+
+    for (std::size_t j = 0; j < kModelBatch; ++j) {
+      // for the last batch, fulfill the extra data with the last image as placeholder
+      auto input = align_results[std::min(start_index + j, input_size - 1)];
+
+      memcpy(pos, input.aligned_face.ptr<std::uint8_t>(), kModelImageSize);
+      pos += kModelImageSize;
+      memcpy(pos, input.aligned_flip_face.ptr<std::uint8_t>(), kModelImageSize);
+      pos += kModelImageSize;
+    }
+
+    auto result = model_.execute();
+    auto data = reinterpret_cast<float*>(result[0].data.get());
+
+    for (std::size_t j = 0; j < kModelBatch; ++j) {
+      std::size_t index = start_index + j;
+      if (index >= input_size) break;
+      auto input = align_results[index];
+
+      results.emplace_back(Result{
+        .index = input.index,
+        .face = input.face,
+        .feature_vector = {}
+      });
+
+      std::size_t st = j * kFeatureVectorLength;
+      for (std::size_t k = 0; k < kFeatureVectorLength; ++k) {
+        results.back().feature_vector.emplace_back(data[st + k]);
+      }
+    }
+  }
+
+  return results;
 }
 
 std::vector<FaceRecognition::AlignResult> FaceRecognition::face_align(const std::vector<FaceFeatureMask::Result> &src) {
@@ -77,7 +115,7 @@ std::vector<FaceRecognition::AlignResult> FaceRecognition::face_align(const std:
 
       if (!check_transform(trans_matrix)) {
         // just ignore this image
-        return std::vector<AlignResult>{};
+        return;
       }
     }
 
@@ -94,6 +132,7 @@ std::vector<FaceRecognition::AlignResult> FaceRecognition::face_align(const std:
 
     results.emplace_back(AlignResult{
      .index = data.index,
+     .face = data.face_image,
      .aligned_face = aligned_image,
      .aligned_flip_face = aligned_flip_image
     });
