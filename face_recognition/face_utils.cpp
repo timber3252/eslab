@@ -62,8 +62,9 @@ std::pair<std::map<std::uint32_t, FaceUtils::Result>, cv::Mat> FaceUtils::face_r
     const auto &result = results[dr.index];
     cv::putText(overlay_image, result.face_tag, cv::Point(pt1.x + 5, pt1.y - 5),
                 cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0), 2);
-    cv::putText(overlay_image, std::to_string(result.score) + "%", cv::Point(pt1.x + 5, pt2.y - 5),
-                cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0), 2);
+    cv::putText(overlay_image, std::to_string(static_cast<std::int32_t>(100 * result.score)) + "%",
+                cv::Point(pt1.x + 5, pt2.y - 5),cv::FONT_HERSHEY_PLAIN, 1,
+                cv::Scalar(0, 255, 0), 2);
   }
 
   return {results, overlay_image};

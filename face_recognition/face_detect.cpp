@@ -53,7 +53,7 @@ std::vector<FaceDetect::Result> FaceDetect::inference(const cv::Mat &frame) {
 
     auto index = data[LABEL + i * kItemSize];
 
-    res.index = index;
+    res.index = i;
     res.score = score;
     res.left_top = left_top;
     res.right_bottom = right_bottom;
