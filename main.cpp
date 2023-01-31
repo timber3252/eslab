@@ -28,6 +28,7 @@ int main() {
   Ssd1306 ssd1306;
   Button button;
 
+  // opencv camera
   cv::VideoCapture capture(0);
   if (!capture.isOpened()) {
     std::cerr << "video capture open error" << std::endl;
@@ -35,6 +36,7 @@ int main() {
   }
 
   while (true) {
+    // capture frames here to make sure the lastest images are got when interruption
     cv::Mat frame;
     if (!capture.read(frame)) {
       std::cerr << "video capture failed" << std::endl;
