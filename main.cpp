@@ -17,14 +17,6 @@
 bool flag = false;
 std::mutex mtx;
 
-// https://stackoverflow.com/questions/30032063/opencv-videocapture-lag-due-to-the-capture-buffer
-void opencv_buffer_clean(cv::VideoCapture &cap) {
-  while (true) {
-    cv::Mat frame;
-    cap.read(frame);
-  }
-}
-
 int main() {
   AclDeviceRAII acl_device;
   FaceUtils face_utils("../data/face_detection.om",
@@ -42,18 +34,15 @@ int main() {
     return -1;
   }
 
-  std::thread opencv_optimize(std::bind(opencv_buffer_clean, capture));
-  opencv_optimize.detach();
-
   while (true) {
+    cv::Mat frame;
+    if (!capture.read(frame)) {
+      std::cerr << "video capture failed" << std::endl;
+      return -1;
+    }
+
     mtx.lock();
     if (flag) {
-      cv::Mat frame;
-      if (!capture.read(frame)) {
-        std::cerr << "video capture failed" << std::endl;
-        return -1;
-      }
-
       auto ret = face_utils.face_recognition(frame);
 
       // send labeled image to huawei presenter
