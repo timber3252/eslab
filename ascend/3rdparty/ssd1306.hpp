@@ -38,7 +38,7 @@ void oled_clear();
 void oled_showPicture(const unsigned char BMP[]);
 void ColorTurn(unsigned char arg);
 void DisplayTurn(unsigned char arg);
-void ShowString(unsigned char x, unsigned char y, char *c, CHAR_SIZE size);
+void ShowString(unsigned char x, unsigned char y, const char *c, CHAR_SIZE size);
 void ShowChar(unsigned char x, unsigned char y, unsigned char c, CHAR_SIZE size);
 void DrawLine(unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2);
 void DrawCircle(unsigned char x, unsigned char y, unsigned char r);

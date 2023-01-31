@@ -112,7 +112,7 @@ void DisplayTurn(unsigned char arg) {
   }
 }
 
-void ShowString(unsigned char x, unsigned char y, char *c, CHAR_SIZE size) {
+void ShowString(unsigned char x, unsigned char y, const char *c, CHAR_SIZE size) {
   while ((*c >= ' ') && (*c <= '~')) //判断不是非法字符
   {
     ShowChar(x, y, *c, size);

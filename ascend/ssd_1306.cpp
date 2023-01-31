@@ -11,9 +11,12 @@ Ssd1306::Ssd1306() {
   thirdparty::oled_init();
 }
 
-void Ssd1306::show_image(const cv::Mat &image) {
-  cv::Mat resize = image_resize(image, 128, 64);
+void Ssd1306::refresh() {
+  thirdparty::Refresh();
+}
 
-//  thirdparty::oled_showPicture();
+void Ssd1306::show_string(std::uint32_t line, const std::string &s) {
+  thirdparty::oled_clear();
+  thirdparty::ShowString(0, line * 12, s.c_str(), thirdparty::size1206);
 }
 
